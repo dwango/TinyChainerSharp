@@ -1,22 +1,26 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Single;
+﻿using MathNet.Numerics.LinearAlgebra.Single;
 
 namespace chainer.links
 {
     public class Linear
     {
-        private Matrix<float> W;
-        private Matrix<float> b;
+        private Variable W;
+        private Variable b;
 
         public Linear()
         {
-            b = DenseMatrix.OfArray(new float[,]{{1, 1, 1}}).Transpose();
-            W = DenseMatrix.OfDiagonalArray(new float[] {1, 1, 1});
+            b = new Variable(DenseMatrix.OfArray(new float[,] {{1, 1, 1}}).Transpose());
+            W = new Variable(DenseMatrix.OfDiagonalArray(new float[] {1, 1, 1}));
         }
 
-        public Matrix<float> Forward(Matrix<float> x)
+        public Variable Forward(Variable x)
         {
-            return W * x + b;
+            return new Variable(W.Value * x.Value + b.Value);
         }
+
+//        public Variable Backward(Variable x, Variable gy)
+//        {
+//            return new Variable(W * x + b);
+//        }
     }
 }
