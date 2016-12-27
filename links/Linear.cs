@@ -20,7 +20,8 @@ namespace chainer.links
 
 //        public Variable Backward(Variable x, Variable gy)
 //        {
-//            return new Variable(W * x + b);
+//            W.Grad = gy.Value.Transpose() * x.Value;
+//            b.Grad = gy.Value.sum
 //        }
     }
 }
