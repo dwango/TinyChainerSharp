@@ -4,25 +4,25 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace chainer.functions
 {
-    public class Add : FunctionBase
+    public class MeanSquaredError: FunctionBase
     {
-        public static Variable add(Variable v1, Variable v2)
-        {
-            return (new Add()).Forward(new List<Variable>(){v1, v2});
-        }
-
         protected override Variable _forward(IEnumerable<Variable> inputs)
         {
             var inputList = inputs.ToList();
-            return new Variable(inputList[0].Value + inputList[1].Value);
+            var diff = inputList[0].Value - inputList[1].Value;
+            return new Variable(diff.Transpose() * diff);
         }
 
         protected override IEnumerable<Matrix<float>> _backward(IEnumerable<Matrix<float>> inputs, Matrix<float> gy)
         {
+            var inputList = inputs.ToList();
+            var diff = inputList[0] - inputList[1];
+            var coefficient = 2.0f / diff.ColumnCount / diff.RowCount;
+            var gx = coefficient * diff;
             return new List<Matrix<float>>()
             {
-                gy,
-                gy
+                gx,
+                -gx
             };
         }
     }

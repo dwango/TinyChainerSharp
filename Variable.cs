@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using chainer.functions;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -23,6 +24,14 @@ namespace chainer
         {
             _creator = creator;
             _isLeaf = false;
+        }
+
+        public void Backward()
+        {
+//            if (!_isLeaf)
+//            {
+//                _creator.Ba
+//            }
         }
     }
 }
