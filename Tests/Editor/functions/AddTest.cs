@@ -8,7 +8,7 @@ namespace chainer.functions
         [Test]
         public void Forwardできる()
         {
-            var result = Add.add(
+            var result = Add.ForwardStatic(
                 new Variable(DenseMatrix.OfArray(new float[,] {{1, 1, 1}})),
                 new Variable(DenseMatrix.OfArray(new float[,] {{1, 2, 1}}))
             );

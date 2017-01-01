@@ -6,11 +6,25 @@ namespace chainer.functions
 {
     public abstract class FunctionBase<ImplementType>: Function where ImplementType : FunctionBase<ImplementType>, new()
     {
-        public static Variable ForwardStatic(Variable v1, Variable v2)
+        public static Variable ForwardStatic(List<Variable> inputs)
         {
-            return (new ImplementType()).Forward(new List<Variable>() {v1, v2});
+            return (new ImplementType()).Forward(inputs);
         }
 
+        public static Variable ForwardStatic(Variable v1)
+        {
+            return ForwardStatic(new List<Variable>() {v1});
+        }
+
+        public static Variable ForwardStatic(Variable v1, Variable v2)
+        {
+            return ForwardStatic(new List<Variable>() {v1, v2});
+        }
+
+        public static Variable ForwardStatic(Variable v1, Variable v2, Variable v3)
+        {
+            return ForwardStatic(new List<Variable>() {v1, v2, v3});
+        }
     }
 
     public abstract class Function

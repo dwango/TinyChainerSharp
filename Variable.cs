@@ -70,7 +70,7 @@ namespace chainer
 
         public static Variable operator +(Variable x, Variable y)
         {
-            return chainer.functions.Add.add(x, y);
+            return Add.ForwardStatic(x, y);
         }
     }
 }

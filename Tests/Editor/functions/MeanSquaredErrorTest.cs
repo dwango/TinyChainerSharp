@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace chainer.functions
 {
