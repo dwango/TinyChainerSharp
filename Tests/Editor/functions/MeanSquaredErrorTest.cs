@@ -40,8 +40,6 @@ namespace chainer.functions
         [Test]
         public void 簡単なoptimizeしてみる()
         {
-            var func0 = new Add();
-            var func1 = new MeanSquaredError();
             var x = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
             var constant = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
             var target = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}).Transpose());
@@ -51,16 +49,15 @@ namespace chainer.functions
             var convergence = false;
             for (int i = 0; i < 100; i++)
             {
-                var loss1 = func1.Forward(new List<Variable>()
-                {
-                    func0.Forward(x, constant),
+                var loss = MeanSquaredError.ForwardStatic(
+                    Add.ForwardStatic(x, constant),
                     target
-                });
+                );
 
-                var loss0 = func1.Backward(loss1.Value);
-                var loss_root = func0.Backward(loss0.ToList()[0]);
-                x.Value -= loss_root.ToList()[0] * lr;
-                if (loss1.Value[0, 0] < 0.1f)
+                x.Grad = null;
+                loss.Backward();
+                x.Value -= x.Grad * lr;
+                if (loss.Value[0, 0] < 0.1f)
                 {
                     convergence = true;
                     break;

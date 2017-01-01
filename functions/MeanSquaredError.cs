@@ -1,22 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
 namespace chainer.functions
 {
-    public class MeanSquaredError: FunctionBase
+    public class MeanSquaredError: FunctionBase<MeanSquaredError>
     {
-        protected override Variable _forward(IEnumerable<Variable> inputs)
+        protected override Variable _forward(List<Variable> inputs)
         {
-            var inputList = inputs.ToList();
-            var diff = inputList[0].Value - inputList[1].Value;
+            var diff = inputs[0].Value - inputs[1].Value;
             return new Variable(diff.Transpose() * diff);
         }
 
-        protected override IEnumerable<Matrix<float>> _backward(IEnumerable<Matrix<float>> inputs, Matrix<float> gy)
+        protected override List<Matrix<float>> _backward(List<Matrix<float>> inputs, Matrix<float> gy)
         {
-            var inputList = inputs.ToList();
-            var diff = inputList[0] - inputList[1];
+            var diff = inputs[0] - inputs[1];
             var coefficient = 2.0f / diff.ColumnCount / diff.RowCount;
             var gx = coefficient * diff;
             return new List<Matrix<float>>()
