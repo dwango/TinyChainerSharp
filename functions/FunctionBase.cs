@@ -4,7 +4,8 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace chainer.functions
 {
-    public abstract class FunctionBase<ImplementType>: Function where ImplementType : FunctionBase<ImplementType>, new()
+    public abstract class FunctionBase<ImplementType> : Function
+        where ImplementType : FunctionBase<ImplementType>, new()
     {
         public static Variable ForwardStatic(List<Variable> inputs)
         {
