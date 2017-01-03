@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 
@@ -42,10 +43,10 @@ namespace chainer.functions
             var constant = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
             var target = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}).Transpose());
 
-            var lr = 0.1f;
+            const float lr = 0.1f;
 
             var convergence = false;
-            for (int i = 0; i < 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 var loss = MeanSquaredError.ForwardStatic(
                     Add.ForwardStatic(x, constant),
@@ -53,6 +54,7 @@ namespace chainer.functions
                 );
 
                 x.Grad = null;
+//                UnityEngine.Debug.Log($"loss: {loss.Value}");
                 loss.Backward();
                 x.Value -= x.Grad * lr;
                 if (loss.Value[0, 0] < 0.1f)

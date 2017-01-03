@@ -10,6 +10,7 @@ namespace chainer
     {
         public Matrix<float> Value;
         public Matrix<float> Grad = null;
+        public Matrix<float> CurrentGrad = null;
         private Function _creator;
         private bool _isLeaf;
 
@@ -28,9 +29,9 @@ namespace chainer
 
         public void Backward()
         {
-            if (Grad == null)
+            if (CurrentGrad == null)
             {
-                Grad =
+                Grad = CurrentGrad =
                     Matrix<float>.Build.Dense(
                         Value.RowCount, Value.ColumnCount, 1f); // LossのGradは1 (自分自身)
             }
@@ -46,9 +47,10 @@ namespace chainer
 
                 var inputs = targetFunction.Inputs;
                 var output = targetFunction.Output;
-                var input_grads = _creator.Backward(output.Value);
+                var input_grads = targetFunction.Backward(output.CurrentGrad);
                 for (int i = 0; i < inputs.Count; i++)
                 {
+                    inputs[i].CurrentGrad = input_grads[i]; // backward用
                     if (inputs[i].Grad == null)
                     {
                         inputs[i].Grad = input_grads[i];

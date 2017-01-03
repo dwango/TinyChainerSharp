@@ -15,7 +15,8 @@ namespace chainer.functions
 
         protected override List<Matrix<float>> _backward(List<Matrix<float>> inputs, Matrix<float> gy)
         {
-            throw new System.NotImplementedException();
+            var y = Output.Value;
+            return new List<Matrix<float>>() {gy.PointwiseMultiply(y).PointwiseMultiply(1 - y)};
         }
     }
 }
