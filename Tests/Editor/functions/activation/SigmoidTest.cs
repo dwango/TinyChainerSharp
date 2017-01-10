@@ -12,7 +12,7 @@ namespace chainer.functions
             var testOutput = Sigmoid.ForwardStatic(testInput);
             var expected = DenseMatrix.OfArray(new float[,] {{0f, 0.26f, 0.62f, 0.73f, 1f}}); // by chainer
 
-            chainer.Helper.MatrixAlmostEqual(testOutput.Value, expected);
+            chainer.Helper.AssertMatrixAlmostEqual(testOutput.Value, expected);
         }
 
         [Test]
@@ -25,7 +25,7 @@ namespace chainer.functions
                 target
             );
             loss.Backward();
-            chainer.Helper.MatrixAlmostEqual(
+            chainer.Helper.AssertMatrixAlmostEqual(
                 testInput.Grad,
                 DenseMatrix.OfArray(new float[,] {{0.03028592f, 0.02665417f, 0.01363052f}}) // by chainer.py
             );

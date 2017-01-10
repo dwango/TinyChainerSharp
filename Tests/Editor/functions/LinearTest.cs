@@ -19,7 +19,7 @@ namespace chainer.functions
             var testOutput = Linear.ForwardStatic(x, W, b);
             var expected = Matrix<float>.Build.DenseOfArray(new float[,] {{24, 16, 17}}); // by chainer
 
-            chainer.Helper.MatrixAlmostEqual(testOutput.Value, expected);
+            chainer.Helper.AssertMatrixAlmostEqual(testOutput.Value, expected);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace chainer.functions
                 target
             );
             loss.Backward();
-            chainer.Helper.MatrixAlmostEqual(
+            chainer.Helper.AssertMatrixAlmostEqual(
                 x.Grad,
                 Matrix<float>.Build.DenseOfArray(new float[,] {{112.33333588f,  127.33333588f,   89f}})
             );

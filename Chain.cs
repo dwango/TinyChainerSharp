@@ -1,22 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace chainer
 {
-    public class Chain
+    public class Chain : Link
     {
-        public Dictionary<string, Variable> Params;
+        protected Dictionary<string, Link> Children = new Dictionary<string, Link>();
 
-        public Chain(Dictionary<string, Variable> @params)
+        public Chain(Dictionary<string, Link> @children)
         {
-            Params = @params;
+            Children = @children;
         }
 
-        public void ClearGrads()
+
+        public override IEnumerable<Variable> GetParams()
         {
-            foreach (var kv in Params)
-            {
-                kv.Value.ClearGrad();
-            }
+            var selfParams = Params.Values.AsEnumerable();
+            var childrenParams = Children.Values.SelectMany(child => child.GetParams());
+            return selfParams.Concat(childrenParams);
         }
     }
 }

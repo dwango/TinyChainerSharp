@@ -5,28 +5,28 @@ namespace chainer
     public class SGD
     {
         private float _lr;
-        private Chain _chain;
+        private Link _link;
 
         public SGD(float lr)
         {
             _lr = lr;
         }
 
-        public void Setup(Chain chain)
+        public void Setup(Link link)
         {
-            _chain = chain;
+            _link = link;
         }
 
         public void ZeroGrads()
         {
-            _chain.ClearGrads();
+            _link.ClearGrads();
         }
 
         public void Update()
         {
-            foreach (var kv in _chain.Params)
+            foreach (var param in _link.GetParams())
             {
-                kv.Value.Value -= _lr * kv.Value.Grad;
+                param.Value -= _lr * param.Grad;
             }
         }
     }
