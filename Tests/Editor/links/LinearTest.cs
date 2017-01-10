@@ -35,7 +35,8 @@ namespace chainer.links
     public class LinearTest
     {
         MatrixBuilder<float> builder = Matrix<float>.Build;
-        public void training(Matrix<float>[,] data)
+
+        public void AssertConvergeAfterTraining(Matrix<float>[,] data)
         {
             var logic = new LogicalOperationChain();
             var optimizer = new SGD(lr: 0.5f);
@@ -57,13 +58,14 @@ namespace chainer.links
                     optimizer.Update();
                 }
 
-                if (Enumerable.Range(0, data.GetLength(0)).All((i) =>
-                {
-                    var input = new Variable(data[i, 0]);
-                    var output = new Variable(data[i, 1]);
-                    var diff = logic.Forward(input).Value - output.Value;
-                    return Math.Abs(diff[0, 0]) < 0.1f;
-                }))
+                if (Enumerable.Range(0, data.GetLength(0))
+                    .All((i) =>
+                    {
+                        var input = new Variable(data[i, 0]);
+                        var output = new Variable(data[i, 1]);
+                        var diff = logic.Forward(input).Value - output.Value;
+                        return Math.Abs(diff[0, 0]) < 0.1f;
+                    }))
                 {
                     converge = true;
 //                    UnityEngine.Debug.Log($"converge: {epoch}");
@@ -71,7 +73,6 @@ namespace chainer.links
                 }
             }
             Assert.True(converge);
-
         }
 
         [Test]
@@ -96,7 +97,7 @@ namespace chainer.links
                     builder.DenseOfArray(new float[,] {{0}}),
                 },
             };
-            training(data);
+            AssertConvergeAfterTraining(data);
         }
 
         [Test]
@@ -121,7 +122,7 @@ namespace chainer.links
                     builder.DenseOfArray(new float[,] {{0}}),
                 },
             };
-            training(data);
+            AssertConvergeAfterTraining(data);
         }
     }
 }
