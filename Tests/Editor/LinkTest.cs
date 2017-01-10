@@ -15,13 +15,13 @@ namespace chainer
             {"const", new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose())}
         })
         {
-            constParam = Params["const"];
+            constParam = _Params["const"];
         }
 
         public Variable Forward(Variable x)
         {
             Variable result;
-            result = Params["const"] + x;
+            result = _Params["const"] + x;
             return result;
         }
     }

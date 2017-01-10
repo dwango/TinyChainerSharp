@@ -12,10 +12,9 @@ namespace chainer
             Children = @children;
         }
 
-
         public override IEnumerable<Variable> GetParams()
         {
-            var selfParams = Params.Values.AsEnumerable();
+            var selfParams = _Params.Values.AsEnumerable();
             var childrenParams = Children.Values.SelectMany(child => child.GetParams());
             return selfParams.Concat(childrenParams);
         }

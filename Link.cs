@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace chainer
 {
     public class Link
     {
-        protected Dictionary<string, Variable> Params = new Dictionary<string, Variable>();
+        public Dictionary<string, Variable> _Params = new Dictionary<string, Variable>();
 
         public Link(Dictionary<string, Variable> @params)
         {
-            Params = @params;
+            _Params = @params;
         }
 
         protected Link()
@@ -18,7 +19,7 @@ namespace chainer
 
         public virtual IEnumerable<Variable> GetParams()
         {
-            return Params.Values.AsEnumerable();
+            return _Params.Values.AsEnumerable();
         }
 
         public void ClearGrads()
@@ -27,6 +28,11 @@ namespace chainer
             {
                 param.ClearGrad();
             }
+        }
+
+        public virtual Variable Forward(Variable x)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace chainer.functions
             var W = inputs[1];
             var gx = gy * W;
             var gW = gy.Transpose() * x;
-            var gb = Matrix<float>.Build.DenseDiagonal(1, gy.RowSums().Sum());
+            var gb = gy.ColumnSums().ToColumnMatrix().Transpose();
             return new List<Matrix<float>>() {gx, gW, gb};
         }
     }

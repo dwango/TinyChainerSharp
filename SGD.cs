@@ -5,7 +5,7 @@ namespace chainer
     public class SGD
     {
         private float _lr;
-        private Link _link;
+        private Link _link = null;
 
         public SGD(float lr)
         {
@@ -19,6 +19,10 @@ namespace chainer
 
         public void ZeroGrads()
         {
+            if (_link == null)
+            {
+                throw new NullReferenceException("optimizer should be setup first");
+            }
             _link.ClearGrads();
         }
 
