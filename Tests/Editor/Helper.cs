@@ -18,8 +18,13 @@ namespace chainer
                     );
                 }
             }
-
         }
 
+        public static void MatrixNotAlmostEqual(Matrix<float> m1, Matrix<float> m2, float delta = 0.01f)
+        {
+            Assert.Throws<AssertionException>(
+                () => { MatrixAlmostEqual(m1, m2, delta); }
+            );
+        }
     }
 }

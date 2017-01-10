@@ -27,6 +27,12 @@ namespace chainer
             _isLeaf = false;
         }
 
+        public void ClearGrad()
+        {
+            Grad = null;
+            CurrentGrad = null;
+        }
+
         public void Backward()
         {
             if (CurrentGrad == null)
