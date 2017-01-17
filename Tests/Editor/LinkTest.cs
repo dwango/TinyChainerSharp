@@ -31,7 +31,7 @@ namespace chainer
         [NUnit.Framework.Test]
         public void LinkのParameterがoptimizerで更新される()
         {
-            var optimizer = new SGD(lr: 0.001f);
+            var optimizer = new optimizers.SGD(lr: 0.001f);
             var link = new SimpleLink();
             optimizer.Setup(link);
 
@@ -51,7 +51,7 @@ namespace chainer
         [NUnit.Framework.Test]
         public void Iterationを回すと最適値になる()
         {
-            var optimizer = new SGD(lr: 0.05f);
+            var optimizer = new optimizers.SGD(lr: 0.05f);
             var link = new SimpleLink();
             optimizer.Setup(link);
 

@@ -39,7 +39,7 @@ namespace chainer.links
         public void AssertConvergeAfterTraining(Matrix<float>[,] data)
         {
             var logic = new LogicalOperationChain();
-            var optimizer = new SGD(lr: 0.5f);
+            var optimizer = new optimizers.SGD(lr: 0.5f);
             optimizer.Setup(logic);
 
             var converge = false;
