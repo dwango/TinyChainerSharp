@@ -12,8 +12,8 @@ namespace chainer.functions
         {
             var func = new MeanSquaredError();
             var loss = func.Forward(
-                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose()),
-                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}).Transpose())
+                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}})),
+                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}))
             );
             Assert.AreEqual(
                 loss.Value,
@@ -25,11 +25,11 @@ namespace chainer.functions
         public void ForwardBackwardで形が変わらない()
         {
             var func = new MeanSquaredError();
-            var x0 = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
+            var x0 = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}));
 
             var loss = func.Forward(
                 x0,
-                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}).Transpose())
+                new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}))
             );
             var gxs = func.Backward(loss.Value).ToList();
             Assert.AreEqual(gxs[0].ColumnCount, x0.Value.ColumnCount);
@@ -39,9 +39,9 @@ namespace chainer.functions
         [Test]
         public void 簡単なoptimizeしてみる()
         {
-            var x = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
-            var constant = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}).Transpose());
-            var target = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}).Transpose());
+            var x = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}));
+            var constant = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}}));
+            var target = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}));
 
             const float lr = 0.1f;
 

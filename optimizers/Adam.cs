@@ -48,7 +48,7 @@ namespace chainer.optimizers
                 );
         }
 
-        public override void _Update()
+        protected override void _Update()
         {
             var fix1 = 1.0f - Math.Pow(_beta1, _iterated_times);
             var fix2 = 1.0f - Math.Pow(_beta2, _iterated_times);

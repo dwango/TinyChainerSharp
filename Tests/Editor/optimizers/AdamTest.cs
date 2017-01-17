@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using chainer.functions;
 using chainer.helper.models;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
@@ -10,6 +11,7 @@ namespace chainer.optimizers
 
     public class AdamTest
     {
+
         MatrixBuilder<float> builder = Matrix<float>.Build;
 
         public void AssertConvergeAfterTraining(Matrix<float>[,] data)
@@ -77,6 +79,53 @@ namespace chainer.optimizers
             AssertConvergeAfterTraining(data);
         }
 
+        [Test]
+        public void chainer_pythonと同じ値になる()
+        {
+            var chain = new VerySmallChain();
+            var optimizer = new chainer.optimizers.Adam();
+            var input = new Variable(builder.DenseOfArray(new float[,] {{4, 3, 2}}));
+            var target = new Variable(builder.DenseOfArray(new float[,] {{100}}));
+            optimizer.Setup(chain);
+            Helper.AssertMatrixAlmostEqual(chain.fc._Params["W"].Value, builder.DenseOfArray(new float[,]{{-1, 0, 1}}));
+            Helper.AssertMatrixAlmostEqual(chain.fc._Params["b"].Value, builder.DenseOfArray(new float[,]{{1}}));
 
+            var loss = MeanSquaredError.ForwardStatic(
+                    chain.Forward(input),
+                    target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10201}}),
+                delta: 0.01f
+            );
+            UnityEngine.Debug.Log($"adloss: {loss.Value}");
+            optimizer.ZeroGrads();
+            loss.Backward();
+            optimizer.Update();
+
+            loss = MeanSquaredError.ForwardStatic(
+                chain.Forward(input),
+                target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10198.9794921875f}}),
+                delta: 0.01f
+            );
+            optimizer.ZeroGrads();
+            loss.Backward();
+            optimizer.Update();
+
+            loss = MeanSquaredError.ForwardStatic(
+                chain.Forward(input),
+                target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10196.9609375f}}),
+                delta: 0.01f
+            );
+        }
     }
 }

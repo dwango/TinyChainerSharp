@@ -32,6 +32,6 @@ namespace chainer.optimizers
             _Update();
         }
 
-        public abstract void _Update();
+        protected abstract void _Update();
     }
 }
