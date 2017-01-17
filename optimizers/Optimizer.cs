@@ -1,20 +1,19 @@
 ﻿using System;
 
-namespace chainer
+namespace chainer.optimizers
 {
-    public class SGD
+    public abstract class Optimizer
     {
-        private float _lr;
-        private Link _link = null;
+        protected Link _link = null;
 
-        public SGD(float lr)
+        protected virtual void _Setup()
         {
-            _lr = lr;
         }
 
         public void Setup(Link link)
         {
             _link = link;
+            _Setup();
         }
 
         public void ZeroGrads()
@@ -26,12 +25,6 @@ namespace chainer
             _link.ClearGrads();
         }
 
-        public void Update()
-        {
-            foreach (var param in _link.GetParams())
-            {
-                param.Value -= _lr * param.Grad;
-            }
-        }
+        public abstract void Update();
     }
 }
