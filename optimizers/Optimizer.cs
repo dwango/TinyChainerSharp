@@ -5,6 +5,7 @@ namespace chainer.optimizers
     public abstract class Optimizer
     {
         protected Link _link = null;
+        protected int _iterated_times = 0;
 
         protected virtual void _Setup()
         {
@@ -25,6 +26,12 @@ namespace chainer.optimizers
             _link.ClearGrads();
         }
 
-        public abstract void Update();
+        public void Update()
+        {
+            _iterated_times += 1;
+            _Update();
+        }
+
+        public abstract void _Update();
     }
 }

@@ -1,19 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using chainer.helper.models;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 
-namespace chainer.links
+namespace chainer.optimizers
 {
-    public class LinearTest
+
+    public class AdamTest
     {
         MatrixBuilder<float> builder = Matrix<float>.Build;
 
         public void AssertConvergeAfterTraining(Matrix<float>[,] data)
         {
             var logic = new LogicalOperationChain();
-            var optimizer = new optimizers.SGD(lr: 0.5f);
+            var optimizer = new optimizers.Adam(alpha: 0.1f);
             optimizer.Setup(logic);
 
             var converge = false;
@@ -27,6 +29,7 @@ namespace chainer.links
                         logic.Forward(input),
                         output
                     );
+//                    UnityEngine.Debug.Log($"loss[{epoch}]: {loss.Value}");
                     optimizer.ZeroGrads();
                     loss.Backward();
                     optimizer.Update();
@@ -74,29 +77,6 @@ namespace chainer.links
             AssertConvergeAfterTraining(data);
         }
 
-        [Test]
-        public void XORが学習できる()
-        {
-            var data = new Matrix<float>[,]
-            {
-                {
-                    builder.DenseOfArray(new float[,] {{1, 1}}),
-                    builder.DenseOfArray(new float[,] {{0}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{0, 1}}),
-                    builder.DenseOfArray(new float[,] {{1}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{1, 0}}),
-                    builder.DenseOfArray(new float[,] {{1}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{0, 0}}),
-                    builder.DenseOfArray(new float[,] {{0}}),
-                },
-            };
-            AssertConvergeAfterTraining(data);
-        }
+
     }
 }

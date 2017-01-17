@@ -13,7 +13,7 @@ namespace chainer.optimizers
         }
 
 
-        public override void Update()
+        public override void _Update()
         {
             foreach (var param in _link.GetParams())
             {
