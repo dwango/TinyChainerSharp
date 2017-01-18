@@ -1,19 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using chainer.functions;
 using chainer.helper.models;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 
-namespace chainer.links
+namespace chainer.optimizers
 {
-    public class LinearTest
+
+    public class AdamTest
     {
+
         MatrixBuilder<float> builder = Matrix<float>.Build;
 
         public void AssertConvergeAfterTraining(Matrix<float>[,] data)
         {
             var logic = new LogicalOperationChain();
-            var optimizer = new optimizers.SGD(lr: 0.5f);
+            var optimizer = new optimizers.Adam(alpha: 0.1f);
             optimizer.Setup(logic);
 
             var converge = false;
@@ -27,6 +31,7 @@ namespace chainer.links
                         logic.Forward(input),
                         output
                     );
+//                    UnityEngine.Debug.Log($"loss[{epoch}]: {loss.Value}");
                     optimizer.ZeroGrads();
                     loss.Backward();
                     optimizer.Update();
@@ -75,28 +80,52 @@ namespace chainer.links
         }
 
         [Test]
-        public void XORが学習できる()
+        public void chainer_pythonと同じ値になる()
         {
-            var data = new Matrix<float>[,]
-            {
-                {
-                    builder.DenseOfArray(new float[,] {{1, 1}}),
-                    builder.DenseOfArray(new float[,] {{0}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{0, 1}}),
-                    builder.DenseOfArray(new float[,] {{1}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{1, 0}}),
-                    builder.DenseOfArray(new float[,] {{1}}),
-                },
-                {
-                    builder.DenseOfArray(new float[,] {{0, 0}}),
-                    builder.DenseOfArray(new float[,] {{0}}),
-                },
-            };
-            AssertConvergeAfterTraining(data);
+            var chain = new VerySmallChain();
+            var optimizer = new chainer.optimizers.Adam();
+            var input = new Variable(builder.DenseOfArray(new float[,] {{4, 3, 2}}));
+            var target = new Variable(builder.DenseOfArray(new float[,] {{100}}));
+            optimizer.Setup(chain);
+            Helper.AssertMatrixAlmostEqual(chain.fc._Params["W"].Value, builder.DenseOfArray(new float[,]{{-1, 0, 1}}));
+            Helper.AssertMatrixAlmostEqual(chain.fc._Params["b"].Value, builder.DenseOfArray(new float[,]{{1}}));
+
+            var loss = MeanSquaredError.ForwardStatic(
+                    chain.Forward(input),
+                    target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10201}}),
+                delta: 0.01f
+            );
+            UnityEngine.Debug.Log($"adloss: {loss.Value}");
+            optimizer.ZeroGrads();
+            loss.Backward();
+            optimizer.Update();
+
+            loss = MeanSquaredError.ForwardStatic(
+                chain.Forward(input),
+                target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10198.9794921875f}}),
+                delta: 0.01f
+            );
+            optimizer.ZeroGrads();
+            loss.Backward();
+            optimizer.Update();
+
+            loss = MeanSquaredError.ForwardStatic(
+                chain.Forward(input),
+                target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{10196.9609375f}}),
+                delta: 0.01f
+            );
         }
     }
 }

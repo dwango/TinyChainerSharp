@@ -8,7 +8,7 @@ namespace chainer.functions
         protected override Variable _forward(List<Variable> inputs)
         {
             var diff = inputs[0].Value - inputs[1].Value;
-            return new Variable(diff.Transpose() * diff);
+            return new Variable(diff * diff.Transpose());
         }
 
         protected override List<Matrix<float>> _backward(List<Matrix<float>> inputs, Matrix<float> gy)
