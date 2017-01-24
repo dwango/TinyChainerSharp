@@ -18,5 +18,14 @@ namespace chainer
             var childrenParams = Children.Values.SelectMany(child => child.GetParams());
             return selfParams.Concat(childrenParams);
         }
+
+        public override void Serialize(Serializer serializer)
+        {
+            base.Serialize(serializer);
+            foreach (var kv in Children)
+            {
+                kv.Value.Serialize(serializer.Traverse(kv.Key));
+            }
+        }
     }
 }
