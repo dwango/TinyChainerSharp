@@ -6,11 +6,6 @@ import numpy
 from chainer import cuda
 
 
-def save_json(filename, obj):
-    with open(filename, 'w') as f:
-        save_json_file(f, obj)
-
-
 def save_json_file(filobj, obj):
     s = chainer.serializers.DictionarySerializer()
     s.save(obj)
@@ -18,6 +13,11 @@ def save_json_file(filobj, obj):
     for key in s.target.keys():
         s.target[key] = s.target[key].tolist()
     json.dump(s.target, filobj)
+
+
+def save_json(filename, obj):
+    with open(filename, 'w') as f:
+        save_json_file(f, obj)
 
 
 class JSONDeserializer(chainer.serializer.Deserializer):
@@ -45,3 +45,8 @@ class JSONDeserializer(chainer.serializer.Deserializer):
 def load_json_file(fileobj, obj):
     d = JSONDeserializer(json.load(fileobj))
     d.load(obj)
+
+
+def load_json(filename, obj):
+    with open(filename) as f:
+        load_json_file(f, obj)
