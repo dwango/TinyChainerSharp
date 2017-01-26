@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using SimpleJSON;
-using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Complex32;
 
 namespace chainer.serializers
 {
@@ -48,6 +47,10 @@ namespace chainer.serializers
         {
             _source = source;
             _path = path;
+        }
+
+        public JsonDeserializer(string jsonfilepath, string path = ""): this(JSONNode.LoadFromFile(jsonfilepath), path)
+        {
         }
 
         public override Serializer Traverse(string key)

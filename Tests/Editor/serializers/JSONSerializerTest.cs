@@ -38,5 +38,11 @@ namespace chainer.serializers
                 link2.Forward(x).Value
             );
         }
+
+        [Test]
+        public void Pythonでsaveしたパラメタを復元できる()
+        {
+            
+        }
     }
 }
