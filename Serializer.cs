@@ -14,9 +14,9 @@ namespace chainer
         public Dictionary<string, Variable> Target;
         private readonly string _path;
 
-        public DictionarySerializer(Dictionary<string, Variable> target, string path = "")
+        public DictionarySerializer(Dictionary<string, Variable> target = null, string path = "")
         {
-            Target = target;
+            Target = target ?? new Dictionary<string, Variable>();
             _path = path;
         }
 
