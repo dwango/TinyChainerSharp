@@ -1,5 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace chainer.serializers
 {
@@ -42,7 +43,22 @@ namespace chainer.serializers
         [Test]
         public void Pythonでsaveしたパラメタを復元できる()
         {
-            
+            var pythonline =
+                "{\"fc/W\": [[0.3128162920475006, 0.12374541908502579, -0.10456687211990356]], \"fc/b\": [0.0]}";
+            var link = new helper.models.VerySmallChain();
+            var deserializer = new JsonDeserializer(SimpleJSON.JSON.Parse(pythonline));
+            var expected = Matrix<float>.Build.DenseOfArray(new float[,] {{0.24660653f}}); // calculated with python
+            var x = new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3,}}));
+
+            Helper.AssertMatrixNotAlmostEqual(
+                link.Forward(x).Value,
+                expected
+            );
+            link.Serialize(deserializer);
+            Helper.AssertMatrixAlmostEqual(
+                link.Forward(x).Value,
+                expected
+            );
         }
     }
 }

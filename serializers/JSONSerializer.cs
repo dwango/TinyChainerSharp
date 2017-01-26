@@ -49,7 +49,7 @@ namespace chainer.serializers
             _path = path;
         }
 
-        public JsonDeserializer(string jsonfilepath, string path = ""): this(JSONNode.LoadFromFile(jsonfilepath), path)
+        public JsonDeserializer(string jsonfilepath, string path = "") : this(JSONNode.LoadFromFile(jsonfilepath), path)
         {
         }
 
@@ -68,6 +68,13 @@ namespace chainer.serializers
             for (var currentNode = _source[fullpath]; currentNode[0].AsArray != null; currentNode = currentNode[0])
             {
                 matrixNode = currentNode;
+            }
+
+            if (matrixNode[0].AsArray == null) // if vector
+            {
+                var tmp = JSON.Parse("[]");
+                tmp[-1] = matrixNode;
+                matrixNode = tmp;
             }
 
             var matrix = new float[matrixNode.AsArray.Count, matrixNode[0].AsArray.Count];
