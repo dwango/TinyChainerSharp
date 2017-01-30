@@ -99,7 +99,6 @@ namespace chainer.optimizers
                 builder.DenseOfArray(new float[,]{{10201}}),
                 delta: 0.01f
             );
-            UnityEngine.Debug.Log($"adloss: {loss.Value}");
             optimizer.ZeroGrads();
             loss.Backward();
             optimizer.Update();
