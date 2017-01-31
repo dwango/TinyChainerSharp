@@ -46,7 +46,7 @@ namespace chainer.serializers
 
         public override Serializer Traverse(string key)
         {
-            return new DictionarySerializer(_source, _path + key + "/");
+            return new DictionaryDeserializer(_source, _path + key + "/");
         }
 
         public override void Communicate(string key, Variable value)
