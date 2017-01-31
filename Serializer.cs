@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace chainer
+namespace chainer.serializers
 {
     public abstract class Serializer
     {
