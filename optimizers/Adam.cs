@@ -55,11 +55,15 @@ namespace chainer.optimizers
             var lr = _alpha * Math.Sqrt(fix2) / fix1;
             foreach (var param in _link.GetParams())
             {
-                _states[param].M = _states[param].M + (1 - _beta1) * (param.Grad - _states[param].M);
-                _states[param].V = _states[param].V + (1 - _beta2) * (param.Grad.PointwiseMultiply(param.Grad) - _states[param].V);
-                param.Value -= _states[param]
-                    .M.Multiply((float) lr)
-                    .PointwiseDivide(_states[param].V.PointwisePower(0.5f) + _eps);
+                if (param.Grad != null)
+                {
+                    _states[param].M = _states[param].M + (1 - _beta1) * (param.Grad - _states[param].M);
+                    _states[param].V = _states[param].V + (1 - _beta2) *
+                                       (param.Grad.PointwiseMultiply(param.Grad) - _states[param].V);
+                    param.Value -= _states[param]
+                        .M.Multiply((float) lr)
+                        .PointwiseDivide(_states[param].V.PointwisePower(0.5f) + _eps);
+                }
             }
         }
     }
