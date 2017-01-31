@@ -17,7 +17,10 @@ namespace chainer.optimizers
         {
             foreach (var param in _link.GetParams())
             {
-                param.Value -= _lr * param.Grad;
+                if (param.Grad != null)
+                {
+                    param.Value -= _lr * param.Grad;
+                }
             }
         }
     }
