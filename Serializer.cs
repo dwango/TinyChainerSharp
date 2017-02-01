@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 
-namespace chainer
+namespace chainer.serializers
 {
     public abstract class Serializer
     {
@@ -14,9 +14,9 @@ namespace chainer
         public Dictionary<string, Variable> Target;
         private readonly string _path;
 
-        public DictionarySerializer(Dictionary<string, Variable> target, string path = "")
+        public DictionarySerializer(Dictionary<string, Variable> target = null, string path = "")
         {
-            Target = target;
+            Target = target ?? new Dictionary<string, Variable>();
             _path = path;
         }
 
@@ -46,7 +46,7 @@ namespace chainer
 
         public override Serializer Traverse(string key)
         {
-            return new DictionarySerializer(_source, _path + key + "/");
+            return new DictionaryDeserializer(_source, _path + key + "/");
         }
 
         public override void Communicate(string key, Variable value)

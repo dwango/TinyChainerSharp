@@ -19,7 +19,7 @@ namespace chainer
             return selfParams.Concat(childrenParams);
         }
 
-        public override void Serialize(Serializer serializer)
+        public override void Serialize(serializers.Serializer serializer)
         {
             base.Serialize(serializer);
             foreach (var kv in Children)

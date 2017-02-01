@@ -2,7 +2,7 @@
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
 
-namespace chainer
+namespace chainer.serializers
 {
     public class SerializerTest
     {

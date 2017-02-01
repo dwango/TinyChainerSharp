@@ -35,7 +35,7 @@ namespace chainer
             throw new NotImplementedException();
         }
 
-        public virtual void Serialize(Serializer serializer)
+        public virtual void Serialize(serializers.Serializer serializer)
         {
             foreach (var kv in _Params)
             {
