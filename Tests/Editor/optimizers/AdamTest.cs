@@ -79,6 +79,41 @@ namespace chainer.optimizers
             AssertConvergeAfterTraining(data);
         }
 
+
+        /// <code>
+        /// input = chainer.Variable(numpy.array([[[[4,3,2]]]], dtype=numpy.float32))
+        /// target = chainer.Variable(numpy.array([[100]], dtype=numpy.float32))
+        /// In [5]: chain = chainer.Chain(fc = chainer.links.Linear(3, 1))
+        /// chain.fc.W.data = numpy.array([[-1, 0, 1]], dtype=numpy.float32)
+        /// chain.fc.b.data = numpy.array([1], dtype=numpy.float32)
+        /// optimizer = chainer.optimizers.Adam()
+        /// optimizer.setup(chain)
+        /// loss = chainer.functions.mean_squared_error(chain.fc(input), target)
+        /// optimizer.zero_grads()
+        /// loss.backward()
+        /// optimizer.update()
+        ///
+        /// loss = chainer.functions.mean_squared_error(chain.fc(input), target)
+        /// loss.data
+        /// >>> array(10198.9794921875, dtype=float32)
+        ///
+        /// optimizer.zero_grads()
+        /// loss.backward()
+        /// optimizer.update()
+        /// loss = chainer.functions.mean_squared_error(chain.fc(input), target)
+        /// loss.data
+        /// >>> array(10196.9609375, dtype=float32)
+        ///
+        /// for i in range(100):
+        ///       loss = chainer.functions.mean_squared_error(chain.fc(input), target)
+        ///       optimizer.zero_grads()
+        ///       loss.backward()
+        ///       optimizer.update()
+        ///
+        /// loss = chainer.functions.mean_squared_error(chain.fc(input), target)
+        /// loss.data
+        /// >>> array(9996.3515625, dtype=float32)
+        /// </code>
         [Test]
         public void chainer_pythonと同じ値になる()
         {
@@ -99,7 +134,6 @@ namespace chainer.optimizers
                 builder.DenseOfArray(new float[,]{{10201}}),
                 delta: 0.01f
             );
-            UnityEngine.Debug.Log($"adloss: {loss.Value}");
             optimizer.ZeroGrads();
             loss.Backward();
             optimizer.Update();
@@ -124,6 +158,27 @@ namespace chainer.optimizers
             Helper.AssertMatrixAlmostEqual(
                 loss.Value,
                 builder.DenseOfArray(new float[,]{{10196.9609375f}}),
+                delta: 0.01f
+            );
+
+            for (int i = 0; i < 100; i++)
+            {
+                loss = MeanSquaredError.ForwardStatic(
+                    chain.Forward(input),
+                    target
+                );
+                optimizer.ZeroGrads();
+                loss.Backward();
+                optimizer.Update();
+            }
+
+            loss = MeanSquaredError.ForwardStatic(
+                chain.Forward(input),
+                target
+            );
+            Helper.AssertMatrixAlmostEqual(
+                loss.Value,
+                builder.DenseOfArray(new float[,]{{9996.3515625f}}),
                 delta: 0.01f
             );
         }
