@@ -34,5 +34,13 @@ namespace chainer
         {
             throw new NotImplementedException();
         }
+
+        public virtual void Serialize(serializers.Serializer serializer)
+        {
+            foreach (var kv in _Params)
+            {
+                serializer.Communicate(kv.Key, kv.Value);
+            }
+        }
     }
 }
