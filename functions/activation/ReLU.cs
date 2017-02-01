@@ -16,7 +16,7 @@ namespace chainer.functions
         protected override List<Matrix<float>> _backward(List<Matrix<float>> inputs, Matrix<float> gy)
         {
             var y = Output.Value;
-            var y_positive = y.Clone().Map(x => x > 0 ? 1f : 0f);;
+            var y_positive = y.Clone().Map(x => x > 0 ? 1f : 0f);
             return new List<Matrix<float>>() {gy.PointwiseMultiply(y_positive)};
         }
     }

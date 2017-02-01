@@ -21,7 +21,6 @@ namespace chainer.serializers
             var link = new helper.models.VerySmallChain();
             var serializer = new JsonSerializer();
             link.Serialize(serializer);
-            UnityEngine.Debug.Log(serializer.Fetch());
 
             var link2 = new helper.models.VerySmallChain();
             link2.fc._Params["W"].Value[0, 0] = -100;
