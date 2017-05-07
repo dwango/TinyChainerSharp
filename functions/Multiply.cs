@@ -14,8 +14,8 @@ namespace chainer.functions
         {
             return new List<Matrix<float>>()
             {
-                gy * inputs[0],
-                gy * inputs[1]
+                gy.PointwiseMultiply(inputs[1]),
+                gy.PointwiseMultiply(inputs[0])
             };
         }
     }
