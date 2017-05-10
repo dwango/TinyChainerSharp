@@ -2,6 +2,7 @@
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
+using UnityEditor;
 
 namespace chainer.functions
 {
@@ -15,9 +16,10 @@ namespace chainer.functions
                 new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 1, 1}})),
                 new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}))
             );
-            Assert.AreEqual(
+            Helper.AssertMatrixAlmostEqual(
                 loss.Value,
-                Matrix<float>.Build.DenseOfArray(new float[,] {{5}})
+                Matrix<float>.Build.DenseOfArray(new float[,] {{1.6666666269302368f}}),
+                delta: 0.00001f
             );
         }
 
@@ -54,7 +56,6 @@ namespace chainer.functions
                 );
 
                 x.Grad = null;
-//                UnityEngine.Debug.Log($"loss: {loss.Value}");
                 loss.Backward();
                 x.Value -= x.Grad * lr;
                 if (loss.Value[0, 0] < 0.1f)
