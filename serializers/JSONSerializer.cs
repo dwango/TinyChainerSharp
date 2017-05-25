@@ -20,7 +20,7 @@ namespace chainer.serializers
                 var rowjson = JSON.Parse("[]");
                 foreach (var value in row)
                 {
-                    rowjson[-1] = new JSONData(value);
+                    rowjson[-1] = new JSONNumber(value);
                 }
                 json[-1] = rowjson;
             }
