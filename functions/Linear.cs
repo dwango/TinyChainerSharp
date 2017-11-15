@@ -39,7 +39,7 @@ namespace chainer.functions
             var x = inputs[0];
             var W = inputs[1];
             var gx = gy * W;
-            var gW = gy.Transpose() * x;
+            var gW = gy.TransposeThisAndMultiply(x);
             var gb = gy.ColumnSums().ToColumnMatrix().Transpose();
             return new List<Matrix<float>>() {gx, gW, gb};
         }
