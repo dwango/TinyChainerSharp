@@ -11,6 +11,7 @@ namespace chainer
         public Matrix<float> Value;
         public Matrix<float> Grad = null;
         public Matrix<float> CurrentGrad = null;
+        private Matrix<float> AddGradBuf = null;
         private Function _creator;
         private bool _isLeaf;
 
@@ -31,6 +32,19 @@ namespace chainer
         {
             Grad = null;
             CurrentGrad = null;
+        }
+
+        /// <summary>
+        /// Same as inputs[i].Grad += grad, but memory efficient
+        /// </summary>
+        public void AddGrad(Matrix<float> grad)
+        {
+            if (AddGradBuf == null)
+            {
+                AddGradBuf = Grad.Clone();
+            }
+            Grad.Add(grad, AddGradBuf);
+            Grad = AddGradBuf;
         }
 
         public void Backward()
@@ -63,7 +77,7 @@ namespace chainer
                     }
                     else
                     {
-                        inputs[i].Grad += input_grads[i];
+                        inputs[i].AddGrad(input_grads[i]);
                     }
                 }
                 foreach (var input in inputs)
