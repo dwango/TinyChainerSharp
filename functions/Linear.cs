@@ -6,9 +6,6 @@ namespace chainer.functions
 {
     public class Linear : FunctionBase<Linear>
     {
-        private Matrix<float> _bufferForXW = null;
-
-
         protected override Variable _forward(List<Variable> inputs)
         {
             if (inputs.Count != 3)
@@ -19,16 +16,7 @@ namespace chainer.functions
             var W = inputs[1].Value;
             var b = inputs[2].Value;
 
-            if (_bufferForXW == null)
-            {
-                _bufferForXW = x.TransposeAndMultiply(W);
-            }
-            else
-            {
-                x.TransposeAndMultiply(W, _bufferForXW);
-            }
-
-            return new Variable(_bufferForXW + b);
+            return new Variable(x.TransposeAndMultiply(W) + b);
         }
 
         protected override List<Matrix<float>> _backward(List<Matrix<float>> inputs, Matrix<float> gy)
