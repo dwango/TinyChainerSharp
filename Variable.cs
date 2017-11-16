@@ -58,6 +58,7 @@ namespace chainer
             if (_isLeaf) return;
 
             var functionQueue = new LinkedList<Function>();
+            var visitedFunctions = new LinkedList<Function>();
             functionQueue.AddLast(_creator);
 
             while (functionQueue.Count > 0)
@@ -87,6 +88,13 @@ namespace chainer
                         functionQueue.AddLast(input._creator);
                     }
                 }
+                visitedFunctions.AddLast(targetFunction);
+            }
+
+            // mark as resuable
+            foreach (var function in visitedFunctions)
+            {
+                function.Reusable = true;
             }
         }
 

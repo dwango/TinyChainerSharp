@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
 
@@ -32,6 +33,7 @@ namespace chainer.functions
     {
         public List<Variable> Inputs;
         public Variable Output;
+        public bool Reusable = false;
 
         public Variable Forward(List<Variable> inputs)
         {

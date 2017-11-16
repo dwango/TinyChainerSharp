@@ -1,9 +1,13 @@
-﻿using MathNet.Numerics.LinearAlgebra;
+﻿using System.Collections.Generic;
+using System.Linq;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace chainer.links
 {
-    public class Linear: Link
+    public class Linear : Link
     {
+        private readonly LinkedList<functions.Linear> _functionPool = new LinkedList<functions.Linear>();
+
         public Linear(int inSize, int outSize)
         {
             _Params["W"] = new Variable(Matrix<float>.Build.Random(outSize, inSize));
@@ -12,7 +16,18 @@ namespace chainer.links
 
         public override Variable Forward(Variable x)
         {
-            return functions.Linear.ForwardStatic(x, _Params["W"], _Params["b"]);
+            var oldFunction = _functionPool.FirstOrDefault(oldFunc => oldFunc.Reusable);
+            if (oldFunction == null)
+            {
+                var function = new functions.Linear();
+                _functionPool.AddLast(function);
+                return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
+            }
+            else
+            {
+                var function = new functions.Linear(oldFunction);
+                return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
+            }
         }
     }
 }
