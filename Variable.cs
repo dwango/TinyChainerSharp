@@ -67,7 +67,7 @@ namespace chainer
 
                 var inputs = targetFunction.Inputs;
                 var output = targetFunction.Output;
-                var input_grads = targetFunction.Backward(output.CurrentGrad);
+                var input_grads = targetFunction.Backward(output);
                 for (int i = 0; i < inputs.Count; i++)
                 {
                     inputs[i].CurrentGrad = input_grads[i]; // backward用

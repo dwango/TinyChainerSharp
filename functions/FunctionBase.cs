@@ -51,9 +51,9 @@ namespace chainer.functions
             return Forward(new List<Variable>() {x0, x1});
         }
 
-        public List<Matrix<float>> Backward(Matrix<float> gy)
+        public List<Matrix<float>> Backward(Variable gy)
         {
-            return _backward(Inputs.Select(x => x.Value).ToList(), gy);
+            return _backward(Inputs.Select(x => x.Value).ToList(), gy.CurrentGrad);
         }
 
         protected abstract Variable _forward(List<Variable> inputs);

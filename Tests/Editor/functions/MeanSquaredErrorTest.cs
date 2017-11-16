@@ -33,7 +33,8 @@ namespace chainer.functions
                 x0,
                 new Variable(Matrix<float>.Build.DenseOfArray(new float[,] {{1, 2, 3}}))
             );
-            var gxs = func.Backward(loss.Value).ToList();
+            loss.CurrentGrad = loss.Value;
+            var gxs = func.Backward(loss).ToList();
             Assert.AreEqual(gxs[0].ColumnCount, x0.Value.ColumnCount);
             Assert.AreEqual(gxs[0].RowCount, x0.Value.RowCount);
         }
