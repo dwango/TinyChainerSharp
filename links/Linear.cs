@@ -27,6 +27,7 @@ namespace chainer.links
             }
             else
             {
+                _functionPool.Remove(oldFunction);
                 var function = new functions.Linear(oldFunction);
                 return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
             }

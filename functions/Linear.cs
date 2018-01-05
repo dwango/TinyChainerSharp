@@ -25,6 +25,7 @@ namespace chainer.functions
         {
             _forwardBuffer = oldFunction._forwardBuffer;
             _backwardBuffer = oldFunction._backwardBuffer;
+            _xbBuffer = oldFunction._xbBuffer;
             ReuseAfterBackward = oldFunction.ReuseAfterBackward;
         }
 
@@ -34,6 +35,7 @@ namespace chainer.functions
             {
                 throw new ArgumentException("function Linear requires 3 inputs");
             }
+
             var x = inputs[0].Value;
             var W = inputs[1].Value;
             var b = inputs[2].Value;
@@ -55,6 +57,7 @@ namespace chainer.functions
             {
                 _xbBuffer.Add(b, _forwardBuffer.Value);
             }
+
             return _forwardBuffer;
         }
 
@@ -76,6 +79,7 @@ namespace chainer.functions
                 gy.TransposeThisAndMultiply(x, _backwardBuffer[1]);
                 _backwardBuffer[2] = gy.ColumnSums().ToRowMatrix();
             }
+
             return _backwardBuffer;
         }
     }
