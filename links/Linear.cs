@@ -19,18 +19,19 @@ namespace chainer.links
         public override Variable Forward(Variable x)
         {
             var oldFunction = _functionPool.FirstOrDefault(oldFunc => oldFunc.Reusable);
+            functions.Linear function;
             if (oldFunction == null)
             {
-                var function = new functions.Linear(reuseAfterBackward: _reuseAfterBackward);
-                _functionPool.AddLast(function);
-                return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
+                function = new functions.Linear(reuseAfterBackward: _reuseAfterBackward);
             }
             else
             {
                 _functionPool.Remove(oldFunction);
-                var function = new functions.Linear(oldFunction);
-                return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
+                function = new functions.Linear(oldFunction);
             }
+
+            _functionPool.AddLast(function);
+            return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
         }
     }
 }
