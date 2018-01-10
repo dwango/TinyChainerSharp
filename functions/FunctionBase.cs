@@ -55,6 +55,7 @@ namespace chainer.functions
 
         public List<Matrix<float>> Backward(Variable gy)
         {
+            UnityEngine.Assertions.Assert.IsFalse(Reusable, "cannnot backward after marked as reusable");
             return _backward(Inputs.Select(x => x.Value).ToList(), gy.CurrentGrad);
         }
 

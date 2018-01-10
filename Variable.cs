@@ -43,8 +43,41 @@ namespace chainer
             {
                 AddGradBuf = Grad.Clone();
             }
+
             Grad.Add(grad, AddGradBuf);
             Grad = AddGradBuf;
+        }
+
+        public void VolatilizeWithoutBackward()
+        {
+            if (_isLeaf) return;
+
+            var functionQueue = new LinkedList<Function>();
+            var visitedFunctions = new LinkedList<Function>();
+            functionQueue.AddLast(_creator);
+
+            while (functionQueue.Count > 0)
+            {
+                var targetFunction = functionQueue.First.Value;
+                functionQueue.RemoveFirst();
+
+                var inputs = targetFunction.Inputs;
+                foreach (var input in inputs)
+                {
+                    if (!input._isLeaf)
+                    {
+                        functionQueue.AddLast(input._creator);
+                    }
+                }
+
+                visitedFunctions.AddLast(targetFunction);
+            }
+
+            // mark as resuable
+            foreach (var function in visitedFunctions)
+            {
+                function.Reusable = true;
+            }
         }
 
         public void Backward()
@@ -55,6 +88,7 @@ namespace chainer
                     Matrix<float>.Build.Dense(
                         Value.RowCount, Value.ColumnCount, 1f); // LossのGradは1 (自分自身)
             }
+
             if (_isLeaf) return;
 
             var functionQueue = new LinkedList<Function>();
@@ -81,6 +115,7 @@ namespace chainer
                         inputs[i].AddGrad(input_grads[i]);
                     }
                 }
+
                 foreach (var input in inputs)
                 {
                     if (!input._isLeaf)
@@ -88,6 +123,7 @@ namespace chainer
                         functionQueue.AddLast(input._creator);
                     }
                 }
+
                 visitedFunctions.AddLast(targetFunction);
             }
 

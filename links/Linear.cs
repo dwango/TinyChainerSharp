@@ -18,6 +18,8 @@ namespace chainer.links
 
         public override Variable Forward(Variable x)
         {
+            UnityEngine.Assertions.Assert.IsTrue(_functionPool.Count < 100000, "Something wrong with functionpool");
+            UnityEngine.Debug.Log(_functionPool.Count);
             var oldFunction = _functionPool.FirstOrDefault(oldFunc => oldFunc.Reusable);
             functions.Linear function;
             if (oldFunction == null)
@@ -26,11 +28,18 @@ namespace chainer.links
             }
             else
             {
+                var before = _functionPool.Count;
                 _functionPool.Remove(oldFunction);
+                var after = _functionPool.Count;
+                UnityEngine.Debug.Log(string.Format("{0} -> {1}", before, after));
                 function = new functions.Linear(oldFunction);
             }
 
-            _functionPool.AddLast(function);
+            if (_reuseAfterBackward)
+            {
+                _functionPool.AddLast(function);
+            }
+
             return function.Forward(new List<Variable>() {x, _Params["W"], _Params["b"]});
         }
     }
