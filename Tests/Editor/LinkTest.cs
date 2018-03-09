@@ -18,7 +18,7 @@ namespace chainer
             constParam = _Params["const"];
         }
 
-        public Variable Forward(Variable x)
+        public override Variable Forward(Variable x)
         {
             Variable result;
             result = _Params["const"] + x;

@@ -19,7 +19,7 @@ namespace chainer.helper.models
             Children["fc2"]._Params["b"].Value = Matrix<float>.Build.Random(1, 1, seed: 1);
         }
 
-        public Variable Forward(Variable x)
+        public override Variable Forward(Variable x)
         {
             var h = x;
             h = functions.Sigmoid.ForwardStatic(Children["fc1"].Forward(h));
