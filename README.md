@@ -1,6 +1,13 @@
-# ChainerCSharp
+# TinyChainerSharp
 Pure C# Reimplementation of chainer, works with unity.
+
 Currently, this only support full-connected layers.
+
+Dependencies
+==============
+
+- Math.NET Numerics
+  - https://github.com/mathnet/mathnet-numerics
 
 Usage
 ===============
