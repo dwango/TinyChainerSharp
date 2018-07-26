@@ -1,5 +1,6 @@
 # ChainerCSharp
-Pure C# Reimplementation of chainer, works with unity
+Pure C# Reimplementation of chainer, works with unity.
+Currently, this only support full-connected layers.
 
 Usage
 ===============
