@@ -1,5 +1,9 @@
-MIT License
+Most of code in this repository is written inspired by chainer.
+For those part:
+Copyright (c) 2015 Preferred Infrastructure, Inc.
+Copyright (c) 2015 Preferred Networks, Inc.
 
+All other part:
 Copyright (c) 2018 DWANGO Co., Ltd.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

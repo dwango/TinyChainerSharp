@@ -1,5 +1,5 @@
 # TinyChainerSharp
-Pure C# Reimplementation of chainer, works with unity.
+Pure C# Reimplementation of [chainer](https://github.com/chainer/chainer), works with unity.
 
 Currently, this only support full-connected layers.
 
@@ -96,3 +96,10 @@ for (int epoch = 0; epoch < 300; epoch++)
     }
 }
 ```
+
+References
+====================
+- Tokui, S., Oono, K., Hido, S. and Clayton, J., Chainer: a Next-Generation Open Source Framework for Deep Learning, Proceedings of Workshop on Machine Learning Systems(LearningSys) in The Twenty-ninth Annual Conference on Neural Information Processing Systems (NIPS), (2015)
+- Chainer
+  - https://github.com/chainer/chainer
+
