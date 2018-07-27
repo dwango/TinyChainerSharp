@@ -1,5 +1,5 @@
 # TinyChainerSharp
-Pure C# Reimplementation of [chainer](https://github.com/chainer/chainer), works with unity.
+Pure C# Reimplementation of [chainer](https://github.com/chainer/chainer), works with Unity.
 
 Currently, this only support full-connected layers.
 
