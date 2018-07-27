@@ -60,8 +60,7 @@ namespace chainer.serializers
         {
             var fullpath = _path + key;
 
-            // check variable depth because it can only handle Matrix
-            // TODO(ogaki): handle tensor whose dimention > 2
+            // check variable depth because it can only handle Matrix(not tensor)
             var matrixNode = _source[fullpath];
             for (var currentNode = _source[fullpath]; currentNode[0].AsArray != null; currentNode = currentNode[0])
             {

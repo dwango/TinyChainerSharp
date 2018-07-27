@@ -8,6 +8,8 @@ Dependencies
 
 - Math.NET Numerics
   - https://github.com/mathnet/mathnet-numerics
+- SimpleJSON
+  - https://github.com/Bunny83/SimpleJSON
 
 Usage
 ===============
@@ -93,5 +95,4 @@ for (int epoch = 0; epoch < 300; epoch++)
         optimizer.Update();
     }
 }
-
 ```
